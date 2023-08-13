@@ -1,0 +1,71 @@
+create database store;
+
+create table countries(
+    code int primary key ,
+    name varchar(20) unique ,
+    continent_name varchar(20) not null
+);
+insert  into countries values  ('111','KSA','Asia');
+
+create table users(
+    id int primary key ,
+    fullname varchar(20)  ,
+    email varchar(20) unique,
+    gender char(1) check ( gender='m' or gender = 'f' ),
+    DOB varchar(15) ,
+    created_at datetime default now(),
+    country_code int,
+    foreign key (country_code) references countries(code)
+
+);
+insert  into users values  ('1','sara hamad','sara@gmail.com','f','2002/1/2',now(),'111');
+
+
+
+create table orders(
+  id int primary key ,
+  user_id int,
+  foreign key (user_id)references users(id),
+  status varchar(6)check( status='start'or status='finish' ),
+  created_at datetime default now()
+);
+
+insert  into orders values  ('12','1','start',now());
+
+
+create table product(
+id int primary key ,
+name varchar(10) not null ,
+price int default 0,
+status varchar(20) check(status='valid' or status= 'expired'),
+created_at datetime default now()
+);
+
+insert into product values('55','lotion','40','valid',now());
+
+
+create table orderProducts(
+order_id int,
+foreign key (order_id) references orders(id),
+product_id int,
+foreign key (product_id)references product(id),
+quantity int default 0
+);
+
+insert into orderProducts values('12','55','10');
+
+update countries set name='saudi' where code='111';
+
+#product have forging key in product order can not be deleted until we delete from product orders
+
+delete from  orderProducts where product_id='55';
+
+delete from  product where id='55';
+
+select * from countries;
+select * from users;
+select * from orders;
+select * from product;
+select * from orderproducts;
+
+
